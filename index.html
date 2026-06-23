@@ -331,7 +331,7 @@
   </div>
 
   <div class="foot">
-    <button id="btnNovaLeitura">ver outro arcano (modo de teste)</button>
+    <button id="btnNovaLeitura">tirar outra carta</button>
   </div>
 
 </div>
@@ -491,13 +491,28 @@
     return 1800 + (hash % 2800);
   }
 
+  // identificador único por visitante, salvo em cookie (dura 2 anos)
+  // garante que a MESMA pessoa veja a MESMA carta se reabrir no mesmo dia,
+  // mas pessoas diferentes vejam cartas diferentes
+  function obterIdVisitante(){
+    var match = document.cookie.match(/centelha_id=([a-z0-9]+)/);
+    if (match) return match[1];
+    var novoId = Math.random().toString(36).slice(2) + Date.now().toString(36);
+    var expira = new Date();
+    expira.setFullYear(expira.getFullYear() + 2);
+    document.cookie = "centelha_id=" + novoId + "; expires=" + expira.toUTCString() + "; path=/";
+    return novoId;
+  }
+
+  var idVisitante = obterIdVisitante();
   var arquetipoAtualIndex = null;
 
   function renderArquetipo(indexForcado){
     var hoje = new Date();
     var chaveDia = hoje.toISOString().slice(0,10);
-    var hash = hashDia(chaveDia);
-    var index = (typeof indexForcado === "number") ? indexForcado : (hash % ARQUETIPOS.length);
+    var hashDoDia = hashDia(chaveDia);
+    var hashPessoal = hashDia(chaveDia + "_" + idVisitante);
+    var index = (typeof indexForcado === "number") ? indexForcado : (hashPessoal % ARQUETIPOS.length);
     arquetipoAtualIndex = index;
     var a = ARQUETIPOS[index];
 
@@ -509,7 +524,7 @@
     document.getElementById("leituraBloqueada").textContent = a.bloqueada;
     document.getElementById("ctaVia").textContent = "fale com um terapeuta credenciado";
 
-    var pessoas = numeroSocialPara(hash + index);
+    var pessoas = numeroSocialPara(hashDoDia + index);
     document.getElementById("socialProof").textContent = pessoas.toLocaleString("pt-BR") + " pessoas tiraram esse mesmo arcano hoje";
 
     document.getElementById("btnDesbloquear").onclick = function(){
@@ -522,7 +537,7 @@
     window.open(URL_TERAPEUTA_ESOTERICO, "_blank");
   };
   document.getElementById("btnNovaLeitura").onclick = function(){
-    var proximo = (arquetipoAtualIndex + 1) % ARQUETIPOS.length;
+    var proximo = Math.floor(Math.random() * ARQUETIPOS.length);
     renderArquetipo(proximo);
   };
 
