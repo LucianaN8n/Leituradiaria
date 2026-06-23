@@ -468,7 +468,7 @@
   ];
 
   var URL_TERAPEUTA_ESOTERICO = "https://go.hotmart.com/B64180573C";
-  var URL_DIRETORIO_ATH = "https://ais-pre-pajr46ehm2ubepnlklzubk-33637048731.us-east1.run.app/";
+  var URL_DIRETORIO_ATH = "https://ais-pre-pajr46ehm2ubepnlklzubk-33637048731.us-east1.run.app/especialidade/terapeuta-holistica";
 
   function formatarData(d){
     var meses = ["janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro"];
@@ -528,7 +528,6 @@
     document.getElementById("socialProof").textContent = pessoas.toLocaleString("pt-BR") + " pessoas tiraram esse mesmo arcano hoje";
 
     document.getElementById("btnDesbloquear").onclick = function(){
-      alert("No diretório, selecione o filtro \"Terapeuta Holística\" para ver os profissionais credenciados nessa especialidade.");
       window.open(URL_DIRETORIO_ATH, "_blank");
     };
   }
