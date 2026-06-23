@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Centelha — leitura do dia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #15111E;
+    --surface: #1E1830;
+    --surface-2: #251D3C;
+    --border: rgba(232,163,61,0.16);
+    --border-soft: rgba(255,255,255,0.07);
+    --text: #F2EEF9;
+    --text-dim: #A79BC4;
+    --text-faint: #6F6589;
+    --gold: #E8A33D;
+    --gold-deep: #B97A1F;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  body{
+    display:flex;
+    justify-content:center;
+    min-height:100vh;
+    padding:0;
+  }
+  .phone{
+    width:100%;
+    max-width:420px;
+    min-height:100vh;
+    background:var(--bg);
+    position:relative;
+    display:flex;
+    flex-direction:column;
+  }
+  .serif{font-family:'Cormorant Garamond', serif;}
+
+  .top{
+    padding:28px 24px 8px;
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+  }
+  .top .date{
+    font-size:12px;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--text-faint);
+  }
+  .top .brand{
+    font-size:13px;
+    letter-spacing:0.14em;
+    color:var(--gold);
+    text-transform:uppercase;
+  }
+
+  .greeting{
+    padding:6px 24px 0;
+  }
+  .greeting h1{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:500;
+    font-size:26px;
+    line-height:1.25;
+    color:var(--text);
+  }
+  .greeting span{color:var(--gold);}
+
+  /* card da carta */
+  .card-wrap{
+    padding:22px 24px 0;
+    display:flex;
+    justify-content:center;
+  }
+  .flame-card{
+    width:100%;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:30px 20px 26px;
+    text-align:center;
+    position:relative;
+    overflow:hidden;
+  }
+  .flame-svg{
+    width:54px;
+    height:74px;
+    margin:0 auto 14px;
+    display:block;
+  }
+  .flame-core{
+    transform-origin:50% 85%;
+    animation:flicker 3.2s ease-in-out infinite;
+  }
+  @keyframes flicker{
+    0%,100%{ transform:scaleY(1) scaleX(1); }
+    25%{ transform:scaleY(1.04) scaleX(0.97); }
+    50%{ transform:scaleY(0.97) scaleX(1.03); }
+    75%{ transform:scaleY(1.02) scaleX(0.99); }
+  }
+  .arc-label{
+    font-size:11px;
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    color:var(--text-faint);
+    margin-bottom:10px;
+  }
+  .arc-nome{
+    font-family:'Cormorant Garamond', serif;
+    font-size:24px;
+    font-weight:600;
+    color:var(--text);
+    margin-bottom:8px;
+  }
+  .arc-sub{
+    font-size:13px;
+    color:var(--text-dim);
+    line-height:1.5;
+  }
+
+  .social-proof{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    padding:14px 24px 0;
+    font-size:12px;
+    color:var(--text-faint);
+  }
+  .social-proof svg{flex-shrink:0;}
+
+  .leitura{
+    padding:18px 24px 0;
+  }
+  .leitura p{
+    font-size:14.5px;
+    line-height:1.75;
+    color:var(--text-dim);
+  }
+
+  .blocked{
+    margin:16px 24px 0;
+    border-radius:14px;
+    border:1px solid var(--border-soft);
+    background:var(--surface);
+    position:relative;
+    overflow:hidden;
+    padding:16px 18px;
+  }
+  .blocked-text{
+    font-size:13.5px;
+    line-height:1.7;
+    color:var(--text-faint);
+    filter:blur(3.5px);
+    user-select:none;
+    pointer-events:none;
+  }
+  .blocked-overlay{
+    position:absolute;
+    inset:0;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    background:linear-gradient(180deg, rgba(30,24,48,0.35), rgba(30,24,48,0.75));
+  }
+  .blocked-overlay svg{width:18px;height:18px;color:var(--text-dim);}
+  .blocked-overlay span{
+    font-size:11.5px;
+    letter-spacing:0.06em;
+    color:var(--text-dim);
+    text-transform:uppercase;
+  }
+
+  .cta-main{
+    margin:20px 24px 0;
+  }
+  .cta-main button{
+    width:100%;
+    padding:15px;
+    border-radius:12px;
+    border:none;
+    background:var(--gold);
+    color:#241705;
+    font-family:'Inter',sans-serif;
+    font-size:14.5px;
+    font-weight:600;
+    cursor:pointer;
+    transition:transform 0.15s ease, background 0.15s ease;
+  }
+  .cta-main button:hover{ background:#F0B559; }
+  .cta-main button:active{ transform:scale(0.98); }
+  .cta-main .via{
+    text-align:center;
+    font-size:11.5px;
+    color:var(--text-faint);
+    margin-top:8px;
+    letter-spacing:0.02em;
+  }
+
+  .cta-row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    padding:18px 24px 0;
+  }
+  .cta-row-single{
+    grid-template-columns:1fr;
+  }
+  .cta-row-single button{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    padding:14px 16px;
+    font-size:13px;
+  }
+  .cta-row-single svg{
+    width:18px;height:18px;
+    margin:0;
+    flex-shrink:0;
+  }
+  .cta-row button{
+    background:var(--surface);
+    border:1px solid var(--border-soft);
+    border-radius:12px;
+    padding:14px 8px;
+    color:var(--text-dim);
+    font-family:'Inter',sans-serif;
+    font-size:11.8px;
+    line-height:1.4;
+    cursor:pointer;
+    transition:border-color 0.15s ease, color 0.15s ease;
+  }
+  .cta-row button:hover{
+    border-color:var(--border);
+    color:var(--text);
+  }
+  .cta-row svg{
+    width:18px;height:18px;
+    display:block;
+    margin:0 auto 6px;
+  }
+
+  .foot{
+    margin-top:auto;
+    padding:30px 24px 26px;
+    text-align:center;
+  }
+  .foot button{
+    background:none;
+    border:none;
+    color:var(--text-faint);
+    font-size:11.5px;
+    text-decoration:underline;
+    text-decoration-color:var(--border-soft);
+    cursor:pointer;
+    letter-spacing:0.02em;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .flame-core{ animation:none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="phone">
+
+  <div class="top">
+    <span class="date" id="dataHoje"></span>
+    <span class="brand">Centelha</span>
+  </div>
+
+  <div class="greeting">
+    <h1>Sua leitura de hoje, <span>viajante</span></h1>
+  </div>
+
+  <div class="card-wrap">
+    <div class="flame-card">
+      <svg class="flame-svg" viewBox="0 0 54 74" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g class="flame-core">
+          <path d="M27 4C27 4 44 24 44 42C44 56 36.4 70 27 70C17.6 70 10 56 10 42C10 24 27 4 27 4Z" fill="#E8A33D" fill-opacity="0.18"/>
+          <path d="M27 16C27 16 37 30 37 43C37 53 32.4 62 27 62C21.6 62 17 53 17 43C17 30 27 16 27 16Z" fill="#E8A33D" fill-opacity="0.4"/>
+          <path d="M27 28C27 28 31 36 31 44C31 50 29.2 56 27 56C24.8 56 23 50 23 44C23 36 27 28 27 28Z" fill="#F0B559"/>
+        </g>
+      </svg>
+      <div class="arc-label" id="arcLabel">arcano</div>
+      <div class="arc-nome serif" id="arcNome">—</div>
+      <div class="arc-sub" id="arcSub">—</div>
+    </div>
+  </div>
+
+  <div class="social-proof">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6F6589" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+    <span id="socialProof">— pessoas tiraram esse mesmo arcano hoje</span>
+  </div>
+
+  <div class="leitura">
+    <p id="leituraCurta">—</p>
+  </div>
+
+  <div class="blocked">
+    <p class="blocked-text" id="leituraBloqueada">—</p>
+    <div class="blocked-overlay">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+      <span>revelação completa bloqueada</span>
+    </div>
+  </div>
+
+  <div class="cta-main">
+    <button id="btnDesbloquear">Desbloquear leitura completa</button>
+    <p class="via" id="ctaVia">—</p>
+  </div>
+
+  <div class="cta-row cta-row-single">
+    <button id="btnAprender">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+      Quero aprender a fazer essas leituras
+    </button>
+  </div>
+
+  <div class="foot">
+    <button id="btnNovaLeitura">ver outro arcano (modo de teste)</button>
+  </div>
+
+</div>
+
+<script>
+  var ARQUETIPOS = [
+    {
+      id:"cabala_07", nome:"Binah, o entendimento silencioso", trilha:"cabala",
+      curta:"Hoje pede mais silêncio do que palavras. Uma compreensão profunda está se formando dentro de você, mas ela ainda precisa de tempo para amadurecer antes de ser dita.",
+      bloqueada:"Binah é a esfera da compreensão receptiva, ligada ao princípio materno da Árvore da Vida. A Cabala ensina uma prática de escuta interior específica para essa esfera, que ajuda a transformar intuições vagas em clareza real, conteúdo detalhado no módulo correspondente do curso.",
+      curso:"Cabala Integrativa",
+      url:"https://go.hotmart.com/N102964587K"
+    },
+    {
+      id:"cabala_08", nome:"Hod, a comunicação consciente", trilha:"cabala",
+      curta:"Suas palavras têm peso extra hoje. É um bom momento para escrever, ensinar ou esclarecer algo que estava confuso entre você e outra pessoa.",
+      bloqueada:"Hod governa a mente racional e a comunicação na Cabala. Existe uma técnica específica para alinhar pensamento e fala antes de conversas importantes, evitando mal-entendidos, ensinada com exemplos práticos no módulo de Hod da formação completa.",
+      curso:"Cabala Integrativa",
+      url:"https://go.hotmart.com/N102964587K"
+    },
+    {
+      id:"cabala_09", nome:"Netzach, o desejo que move",
+      trilha:"cabala",
+      curta:"Uma emoção forte pode estar te puxando para uma direção hoje. Antes de reprimi-la, vale entender o que ela está realmente pedindo.",
+      bloqueada:"Netzach é a esfera do desejo, da arte e da emoção que impulsiona a ação. A Cabala mostra como diferenciar um desejo que constrói de um impulso que dispersa, distinção que é um dos pilares práticos do módulo de Netzach no curso completo.",
+      curso:"Cabala Integrativa",
+      url:"https://go.hotmart.com/N102964587K"
+    },
+    {
+      id:"cabala_01", nome:"Kether, a coroa", trilha:"cabala",
+      curta:"Hoje você está mais próxima do propósito maior da sua vida do que imagina. Há uma intenção original tentando se manifestar através de você.",
+      bloqueada:"Kether, no topo da Árvore da Vida, representa a vontade divina antes de qualquer forma. Trabalhar essa esfera específica revela o propósito que está por trás das suas escolhas mais recentes, e existe um exercício cabalístico próprio para acessar essa clareza, ensinado em profundidade no módulo correspondente.",
+      curso:"Cabala Integrativa",
+      url:"https://go.hotmart.com/N102964587K"
+    },
+    {
+      id:"cabala_02", nome:"Chesed, a misericórdia expansiva", trilha:"cabala",
+      curta:"Uma energia de generosidade e expansão favorece você hoje. É um bom momento para dar sem medo de faltar, e para receber sem culpa.",
+      bloqueada:"Chesed é a esfera do amor que se expande sem limites, mas que precisa de equilíbrio para não se tornar excesso. A tradição cabalística ensina como equilibrar essa força com sua esfera complementar, conteúdo explorado a fundo no módulo prático do curso.",
+      curso:"Cabala Integrativa",
+      url:"https://go.hotmart.com/N102964587K"
+    },
+    {
+      id:"cabala_03", nome:"Gevurah, o limite necessário", trilha:"cabala",
+      curta:"Pode ser o dia de dizer não. Um limite que você está evitando colocar precisa ser estabelecido para que sua energia não se disperse.",
+      bloqueada:"Gevurah representa o rigor e o limite que dão forma à expansão de Chesed. Sem essa força, tudo se dissolve. A Cabala ensina técnicas específicas para impor limites sem dureza excessiva, um dos pontos mais práticos e aplicáveis do curso completo.",
+      curso:"Cabala Integrativa",
+      url:"https://go.hotmart.com/N102964587K"
+    },
+    {
+      id:"cabala_04", nome:"Tiferet, a beleza do equilíbrio", trilha:"cabala",
+      curta:"Você está em um ponto de equilíbrio raro hoje, entre dar e receber, entre razão e emoção. Aproveite essa harmonia para tomar decisões importantes.",
+      bloqueada:"Tiferet é o centro da Árvore da Vida, onde todas as forças se equilibram. Acessar essa esfera conscientemente é uma das práticas centrais da Cabala integrativa, e o módulo completo ensina um ritual simples para retornar a esse centro sempre que a vida desorganizar.",
+      curso:"Cabala Integrativa",
+      url:"https://go.hotmart.com/N102964587K"
+    },
+    {
+      id:"cabala_05", nome:"Yesod, o alicerce invisível", trilha:"cabala",
+      curta:"Seus sonhos e sua intuição estão mais ativos do que o normal. Preste atenção ao que aparece antes de dormir e logo ao despertar.",
+      bloqueada:"Yesod é a esfera ligada ao inconsciente, à lua e aos sonhos, a ponte entre o mundo espiritual e o mundo material. A Cabala oferece um método específico de leitura de sonhos através dessa esfera, normalmente reservado às aulas avançadas do curso.",
+      curso:"Cabala Integrativa",
+      url:"https://go.hotmart.com/N102964587K"
+    },
+    {
+      id:"cabala_06", nome:"Malkuth, o reino manifesto", trilha:"cabala",
+      curta:"O que você tem feito no plano concreto, corpo, dinheiro, rotina, está mais conectado ao seu propósito espiritual do que parece.",
+      bloqueada:"Malkuth é onde o divino se manifesta na matéria, e a Cabala ensina que cuidar do corpo e da vida prática é, em si, um ato espiritual. O módulo sobre Malkuth aprofunda como transformar tarefas cotidianas em prática cabalística consciente.",
+      curso:"Cabala Integrativa",
+      url:"https://go.hotmart.com/N102964587K"
+    },
+    {
+      id:"tarot_01", nome:"A Imperatriz", trilha:"esoterico",
+      curta:"Hoje pede criação, fertilidade e cuidado, de um projeto, de uma ideia ou de você mesma. É um dia para nutrir o que está nascendo.",
+      bloqueada:"A Imperatriz no tarot representa abundância e criação ativa, mas sua leitura completa depende da posição das cartas vizinhas e do contexto da pergunta. Aprender a fazer essa leitura combinada é uma das primeiras habilidades ensinadas na formação em Terapeuta Esotérico.",
+      curso:"Terapeuta Esotérico",
+      url:"https://go.hotmart.com/B64180573C"
+    },
+    {
+      id:"tarot_02", nome:"A Roda da Fortuna", trilha:"esoterico",
+      curta:"Uma virada de ciclo está próxima. Algo que parecia estagnado começa a se mover, para o seu favor, se você estiver atenta às oportunidades.",
+      bloqueada:"A Roda da Fortuna marca o ponto onde o destino encontra a ação pessoal. Saber identificar se um ciclo está subindo ou descendo, e o que fazer em cada fase, é uma das técnicas mais valiosas ensinadas no módulo de tarot preditivo da formação completa.",
+      curso:"Terapeuta Esotérico",
+      url:"https://go.hotmart.com/B64180573C"
+    },
+    {
+      id:"numero_01", nome:"Número pessoal 7", trilha:"esoterico",
+      curta:"Sua vibração numerológica de hoje pede introspecção e análise. Evite decisões impulsivas, o número 7 favorece quem para para pensar antes de agir.",
+      bloqueada:"O número 7 na numerologia carrega uma vibração de busca espiritual e necessidade de solidão produtiva. Calcular como esse número interage com seu número pessoal de nascimento revela ciclos específicos da sua vida, cálculo ensinado passo a passo na formação em Terapeuta Esotérico.",
+      curso:"Terapeuta Esotérico",
+      url:"https://go.hotmart.com/B64180573C"
+    },
+    {
+      id:"tarot_03", nome:"A Torre", trilha:"esoterico",
+      curta:"Uma estrutura antiga pode precisar cair para que algo mais verdadeiro possa ser construído. Não tema a mudança brusca que se aproxima.",
+      bloqueada:"A Torre costuma assustar quem está começando no tarot, mas sua leitura correta depende de entender o que ela revela sobre libertação, não apenas sobre crise. A formação completa ensina como conduzir esse tipo de leitura com responsabilidade emocional para quem está do outro lado da mesa.",
+      curso:"Terapeuta Esotérico",
+      url:"https://go.hotmart.com/B64180573C"
+    },
+    {
+      id:"numero_02", nome:"Ano pessoal 1", trilha:"esoterico",
+      curta:"Você está em um ciclo numerológico de início. É hora de plantar sementes novas, mesmo que ainda não saiba exatamente onde vão crescer.",
+      bloqueada:"O ano pessoal 1 na numerologia marca o início de um ciclo de nove anos, um dos cálculos mais usados por numerólogos profissionais para orientar clientes sobre o melhor momento de agir. Esse cálculo completo, com tabela de interpretação de todos os ciclos, está no módulo de numerologia da formação.",
+      curso:"Terapeuta Esotérico",
+      url:"https://go.hotmart.com/B64180573C"
+    },
+    {
+      id:"tarot_04", nome:"A Estrela", trilha:"esoterico",
+      curta:"Depois de um período difícil, uma luz de esperança e renovação se acende. Confie que o pior já passou.",
+      bloqueada:"A Estrela é uma das cartas mais aguardadas em qualquer leitura, pois sinaliza cura após a crise. Saber posicionar essa carta dentro de uma tiragem maior, e não isoladamente, é o que diferencia uma leitura amadora de uma leitura profissional, conteúdo central da formação em Terapeuta Esotérico.",
+      curso:"Terapeuta Esotérico",
+      url:"https://go.hotmart.com/B64180573C"
+    },
+    {
+      id:"numero_03", nome:"Número pessoal 3", trilha:"esoterico",
+      curta:"Sua energia de hoje favorece expressão, comunicação e leveza. É um bom dia para conversar, escrever ou compartilhar algo que estava guardado.",
+      bloqueada:"O número 3 na numerologia é regido pela expansão criativa e pela comunicação. Saber cruzar esse número com o número do dia atual de quem você está lendo é uma das primeiras técnicas práticas ensinadas na formação em Terapeuta Esotérico.",
+      curso:"Terapeuta Esotérico",
+      url:"https://go.hotmart.com/B64180573C"
+    },
+    {
+      id:"tarot_05", nome:"O Sol", trilha:"esoterico",
+      curta:"Clareza, vitalidade e reconhecimento marcam o seu dia. O que estava nebuloso começa a se mostrar com nitidez.",
+      bloqueada:"O Sol é considerada uma das cartas mais positivas do baralho, mas sua força real aparece quando combinada com a carta anterior na tiragem. A leitura combinada de cartas de luz é ensinada em detalhe no módulo de tarot intuitivo da formação completa.",
+      curso:"Terapeuta Esotérico",
+      url:"https://go.hotmart.com/B64180573C"
+    },
+    {
+      id:"numero_04", nome:"Número pessoal 9", trilha:"esoterico",
+      curta:"Hoje pede encerramento. Algo está pedindo para ser concluído antes que você consiga abrir espaço para o que vem a seguir.",
+      bloqueada:"O número 9 na numerologia representa o fim de um ciclo e a preparação para um novo início. Identificar em que fase do ciclo de nove anos uma pessoa está é uma das ferramentas mais usadas por numerólogos profissionais, ensinada com tabela completa na formação em Terapeuta Esotérico.",
+      curso:"Terapeuta Esotérico",
+      url:"https://go.hotmart.com/B64180573C"
+    }
+  ];
+
+  var URL_TERAPEUTA_ESOTERICO = "https://go.hotmart.com/B64180573C";
+  var URL_DIRETORIO_ATH = "https://ais-pre-pajr46ehm2ubepnlklzubk-33637048731.us-east1.run.app/";
+
+  function formatarData(d){
+    var meses = ["janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro"];
+    return d.getDate() + " de " + meses[d.getMonth()];
+  }
+
+  // hash determinístico simples a partir de uma string de data, garante que
+  // todo visitante no mesmo dia veja o mesmo arquétipo (efeito manada real)
+  function hashDia(str){
+    var h = 0;
+    for (var i = 0; i < str.length; i++){
+      h = (h << 5) - h + str.charCodeAt(i);
+      h |= 0;
+    }
+    return Math.abs(h);
+  }
+
+  function numeroSocialPara(hash){
+    // gera um número "estável" de pessoas para o dia, entre 1800 e 4600
+    return 1800 + (hash % 2800);
+  }
+
+  var arquetipoAtualIndex = null;
+
+  function renderArquetipo(indexForcado){
+    var hoje = new Date();
+    var chaveDia = hoje.toISOString().slice(0,10);
+    var hash = hashDia(chaveDia);
+    var index = (typeof indexForcado === "number") ? indexForcado : (hash % ARQUETIPOS.length);
+    arquetipoAtualIndex = index;
+    var a = ARQUETIPOS[index];
+
+    document.getElementById("dataHoje").textContent = formatarData(hoje);
+    document.getElementById("arcLabel").textContent = a.trilha === "gnose" ? "arconte gnóstico" : (a.trilha === "cabala" ? "esfera cabalística" : "arcano / número");
+    document.getElementById("arcNome").textContent = a.nome;
+    document.getElementById("arcSub").textContent = a.curso;
+    document.getElementById("leituraCurta").textContent = a.curta;
+    document.getElementById("leituraBloqueada").textContent = a.bloqueada;
+    document.getElementById("ctaVia").textContent = "fale com um terapeuta credenciado";
+
+    var pessoas = numeroSocialPara(hash + index);
+    document.getElementById("socialProof").textContent = pessoas.toLocaleString("pt-BR") + " pessoas tiraram esse mesmo arcano hoje";
+
+    document.getElementById("btnDesbloquear").onclick = function(){
+      alert("No diretório, selecione o filtro \"Terapeuta Holística\" para ver os profissionais credenciados nessa especialidade.");
+      window.open(URL_DIRETORIO_ATH, "_blank");
+    };
+  }
+
+  document.getElementById("btnAprender").onclick = function(){
+    window.open(URL_TERAPEUTA_ESOTERICO, "_blank");
+  };
+  document.getElementById("btnNovaLeitura").onclick = function(){
+    var proximo = (arquetipoAtualIndex + 1) % ARQUETIPOS.length;
+    renderArquetipo(proximo);
+  };
+
+  renderArquetipo();
+</script>
+
+</body>
+</html>
